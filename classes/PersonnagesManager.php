@@ -12,7 +12,7 @@ class PersonnagesManager {
     }
     
     public function addPersonnage($nom, $type) {
-        $req = $this->bdd->prepare('INSERT INTO Personnages_v2
+        $req = $this->bdd->prepare('INSERT INTO personnage
                                              SET nom    = :nom,
                                                  type   = :type
                                    ');          
@@ -26,7 +26,7 @@ class PersonnagesManager {
     }
 
     public function updatePersonnage(Personnage $perso) {
-        $req = $this->bdd->prepare('UPDATE Personnages_v2
+        $req = $this->bdd->prepare('UPDATE personnage
                                         SET degats          = :degats,
                                             timeToBeAsleep  = :timeToBeAsleep,
                                             atout           = :atout
@@ -43,20 +43,20 @@ class PersonnagesManager {
     }
 
     public function deletePersonnage(Personnage $perso) {
-        $this->bdd->exec('DELETE FROM Personnages_v2
+        $this->bdd->exec('DELETE FROM personnage
                                  WHERE id = ' . $perso->getId());
     }
     
     public function getPersonnage($info) {
         if (is_int($info)) {
             $req = $this->bdd->query('SELECT id, nom, degats, timeToBeAsleep, type, atout
-                                         FROM Personnages_v2
+                                         FROM personnage
                                         WHERE id = ' . $info);
             $datasOfPerso = $req->fetch(PDO::FETCH_ASSOC);
         }
         else {
             $req = $this->bdd->prepare('SELECT id, nom, degats, timeToBeAsleep, type, atout
-                                           FROM Personnages_v2
+                                           FROM personnage
                                           WHERE nom = :nom');
             $req->execute([':nom' => $info]);
             
@@ -64,9 +64,16 @@ class PersonnagesManager {
         }
         
         switch ($datasOfPerso['type']) {
-            case 'guerrier' : return new Guerrier($datasOfPerso);
-            case 'magicien' : return new Magicien($datasOfPerso);
-            default : return null;
+            case 'guerrier' : 
+                return new Guerrier($datasOfPerso);
+                break;
+            case 'magicien' : 
+                return new Magicien($datasOfPerso);
+                break;
+            default : 
+            return null;
+                break;
+
         }
         
         $req->closeCursor();
@@ -76,7 +83,7 @@ class PersonnagesManager {
         $persos = [];
         
         $req = $this->bdd->prepare('SELECT id, nom, degats, timeToBeAsleep, type, atout
-                                      FROM Personnages_v2
+                                      FROM personnage
                                      WHERE nom <> :nom
                                      ORDER BY nom');
         $req->execute([':nom' => $nom]);
@@ -97,17 +104,17 @@ class PersonnagesManager {
     
     public function countPersonnages() {
         return $this->bdd->query('SELECT COUNT(*)
-                                     FROM Personnages_v2')->fetchColumn();
+                                     FROM personnage')->fetchColumn();
     }
     
     public function ifPersonnageExist($info) {
         if (is_int($info)) {
             return (bool) $this->bdd->query('SELECT COUNT(*)
-                                                FROM Personnages_v2
+                                                FROM personnage
                                                WHERE id = ' . $info)->fetchColumn();
         }
         $req = $this->bdd->prepare('SELECT COUNT(*)
-                                       FROM Personnages_v2
+                                       FROM personnage
                                       WHERE nom = :nom');
         $req->execute([':nom' => $info]);
         return (bool) $req->fetchColumn();

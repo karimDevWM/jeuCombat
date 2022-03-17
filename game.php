@@ -241,6 +241,7 @@ elseif (isset($_GET['envouter']))
                             Nom : <?= htmlspecialchars($perso->getNom()) ?><br>
                             Dégâts : <?= $perso->getDegats() ?><br>
                             Type : <?= ucfirst($perso->getType()) ?><br>
+                            Niveau : <?= $perso->getNiveau() ?><br>
                             <?php
                             
                             switch ($perso->getType()) {

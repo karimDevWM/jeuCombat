@@ -4,16 +4,17 @@ abstract class Personnage {
     protected   $id,
                 $nom,
                 $degats,
+                $niveau,
                 $timeToBeAsleep,
                 $type,
                 $atout;
     
-    const DETECT_ME     = 1; // Constante renvoyée par la méthode frapperUnPersonnage - détecte si on se frappe soi-même
-    const PERSO_DEAD    = 2; // Constante renvoyée par la méthode frapperUnPersonnage - détecte si un personnage est tué en le frappant
-    const PERSO_COUP    = 3; // Constante renvoyée par la méthode frapperUnPersonnage - détecte si un coup est bien porté à un personnage
-    const PERSO_ENVOUTE = 4; // Constante renvoyée par la méthode lancerUnSort - détecte si le sort est bien lancé
-    const NO_MAGIE      = 5; // Constante renvoyée par la méthode lancerUnSort - détecte si magie du magicien à 0
-    const PERSO_ASLEEP  = 6; // Constante renvoyé par la méthode frapperUnPersonnage - détecte si le personnage qui veut frapper est endormi
+    const DETECT_ME     = 1; // renvoyée par la méthode frapperUnPersonnage - détecte si on se frappe soi-même
+    const PERSO_DEAD    = 2; // renvoyée par la méthode frapperUnPersonnage - détecte si un personnage est tué en le frappant
+    const PERSO_COUP    = 3; // renvoyée par la méthode frapperUnPersonnage - détecte si un coup est bien porté à un personnage
+    const PERSO_ENVOUTE = 4; // renvoyée par la méthode lancerUnSort - détecte si le sort est bien lancé
+    const NO_MAGIE      = 5; // renvoyée par la méthode lancerUnSort - détecte si magie du magicien à 0
+    const PERSO_ASLEEP  = 6; // renvoyé par la méthode frapperUnPersonnage - détecte si le personnage qui veut frapper est endormi
 
 
     public function __construct(array $datas) {
@@ -85,6 +86,11 @@ abstract class Personnage {
     public function getNom() {
         return $this->nom;
     }
+
+    public function getNiveau()
+    {
+        return $this->niveau;
+    }
     
     public function getDegats() {
         return $this->degats;
@@ -109,6 +115,16 @@ abstract class Personnage {
      public function setNom($nom) {
          if (is_string($nom)) {
              $this->nom = $nom;
+         }
+     }
+
+     public function setNiveau($niveau)
+     {
+         $niveau = (int) $niveau;
+
+         if($niveau >= 1)
+         {
+             $this->niveau = $niveau;
          }
      }
      
